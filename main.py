@@ -141,11 +141,52 @@ class TrainBookingSystem:
         """Initialize with sample train data if no trains exist"""
         if not self.trains:
             sample_trains = [
+                # North America
                 Train("T001", "Express Mail", "New York", "Boston", "08:00", "12:00", 100, 50.0),
                 Train("T002", "City Connect", "Boston", "Washington", "14:00", "18:30", 80, 65.0),
                 Train("T003", "Metro Link", "Washington", "Philadelphia", "10:30", "13:15", 120, 45.0),
                 Train("T004", "Coast Runner", "Philadelphia", "New York", "16:00", "19:45", 90, 55.0),
-                Train("T005", "Night Express", "New York", "Chicago", "22:00", "08:00+1", 150, 120.0)
+                Train("T005", "Night Express", "New York", "Chicago", "22:00", "08:00+1", 150, 120.0),
+                Train("T006", "Pacific Coast", "Los Angeles", "San Francisco", "09:00", "13:30", 200, 75.0),
+                Train("T007", "Desert Wind", "Phoenix", "Denver", "11:00", "18:45", 130, 95.0),
+                Train("T008", "Maple Leaf", "Toronto", "Montreal", "07:30", "12:00", 180, 85.0),
+                Train("T009", "Rocky Mountain", "Calgary", "Vancouver", "15:00", "22:30", 160, 110.0),
+                
+                # Europe
+                Train("E001", "Eurostar", "London", "Paris", "09:15", "12:47", 750, 120.0),
+                Train("E002", "TGV", "Paris", "Lyon", "07:00", "09:00", 380, 95.0),
+                Train("E003", "ICE", "Berlin", "Munich", "08:30", "12:30", 400, 89.0),
+                Train("E004", "AVE", "Madrid", "Barcelona", "06:30", "09:15", 350, 78.0),
+                Train("E005", "Frecciarossa", "Rome", "Milan", "10:00", "13:10", 500, 85.0),
+                Train("E006", "Thalys", "Amsterdam", "Brussels", "11:20", "13:15", 380, 65.0),
+                Train("E007", "OBB Railjet", "Vienna", "Budapest", "14:30", "17:00", 300, 55.0),
+                Train("E008", "SJ High Speed", "Stockholm", "Gothenburg", "16:00", "19:10", 280, 70.0),
+                
+                # Asia
+                Train("A001", "Shinkansen Hikari", "Tokyo", "Osaka", "06:00", "08:46", 1323, 130.0),
+                Train("A002", "KTX", "Seoul", "Busan", "09:00", "11:50", 935, 45.0),
+                Train("A003", "CRH380A", "Beijing", "Shanghai", "07:30", "12:30", 1061, 85.0),
+                Train("A004", "Harmony Express", "Mumbai", "Delhi", "16:05", "08:10+1", 1850, 25.0),
+                Train("A005", "Gatimaan Express", "Delhi", "Agra", "08:10", "09:50", 752, 15.0),
+                Train("A006", "ETS", "Kuala Lumpur", "Ipoh", "07:00", "09:30", 280, 12.0),
+                Train("A007", "Blue Train", "Bangkok", "Chiang Mai", "18:10", "06:20+1", 850, 35.0),
+                
+                # Australia
+                Train("AU001", "XPT", "Sydney", "Melbourne", "07:42", "18:30", 232, 89.0),
+                Train("AU002", "Spirit of Queensland", "Brisbane", "Cairns", "18:55", "06:50+2", 964, 180.0),
+                Train("AU003", "Indian Pacific", "Sydney", "Perth", "14:55", "09:10+3", 2720, 450.0),
+                Train("AU004", "Overlander", "Adelaide", "Melbourne", "07:45", "18:30", 828, 75.0),
+                Train("AU005", "TranzAlpine", "Christchurch", "Greymouth", "08:15", "13:05", 223, 95.0),
+                
+                # Africa
+                Train("AF001", "Blue Train", "Cape Town", "Johannesburg", "12:00", "18:00+1", 1600, 250.0),
+                Train("AF002", "Pride of Africa", "Cairo", "Aswan", "20:00", "09:00+1", 890, 120.0),
+                Train("AF003", "Desert Express", "Windhoek", "Swakopmund", "19:00", "06:30+1", 460, 85.0),
+                
+                # South America
+                Train("SA001", "Trem de Prata", "São Paulo", "Rio de Janeiro", "22:30", "06:38+1", 429, 65.0),
+                Train("SA002", "El Libertador", "Buenos Aires", "Mendoza", "20:30", "15:20+1", 1050, 45.0),
+                Train("SA003", "Cusco-Machu Picchu", "Cusco", "Aguas Calientes", "06:10", "09:54", 112, 75.0)
             ]
             
             for train in sample_trains:

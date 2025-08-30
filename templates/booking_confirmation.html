@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Confirmation - TrainBook Pro{% endblock %}
+
+{% block content %}
+<div style="margin-top: 100px;"></div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Success Message -->
+            <div class="text-center mb-4">
+                <div class="display-1 text-success mb-3">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h1 class="text-success">Booking Confirmed!</h1>
+                <p class="lead text-muted">Your train ticket has been successfully booked</p>
+            </div>
+
+            <!-- Booking Details -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-ticket-alt me-2"></i>Booking Confirmation
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Booking ID -->
+                    <div class="alert alert-info text-center mb-4">
+                        <h6 class="mb-2">Your Booking ID</h6>
+                        <h3 class="mb-0 font-monospace">{{ booking.booking_id }}</h3>
+                        <small class="text-muted">Please save this ID for future reference</small>
+                    </div>
+
+                    <!-- Train Information -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-train me-2"></i>Train Details
+                            </h6>
+                        </div>
+                        <div class="col-md-8">
+                            <h4 class="text-primary">{{ train.name }}</h4>
+                            <p class="text-muted mb-2">Train ID: {{ train.train_id }}</p>
+                            
+                            <div class="route-info">
+                                <div class="row text-center">
+                                    <div class="col-5">
+                                        <div class="fw-bold">{{ train.source }}</div>
+                                        <div class="text-primary fs-4 fw-bold">{{ train.departure_time }}</div>
+                                        <small class="text-muted">Departure</small>
+                                    </div>
+                                    <div class="col-2 d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-arrow-right fa-2x text-muted"></i>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="fw-bold">{{ train.destination }}</div>
+                                        <div class="text-success fs-4 fw-bold">{{ train.arrival_time }}</div>
+                                        <small class="text-muted">Arrival</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="price-tag fs-3">
+                                ${{ "%.2f"|format(train.price) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Passenger Information -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-user me-2"></i>Passenger Details
+                            </h6>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="fw-bold">Name:</td>
+                                    <td>{{ booking.passenger.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Age:</td>
+                                    <td>{{ booking.passenger.age }} years</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Gender:</td>
+                                    <td>{{ booking.passenger.gender }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="fw-bold">Phone:</td>
+                                    <td>{{ booking.passenger.phone }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Email:</td>
+                                    <td>{{ booking.passenger.email }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Status:</td>
+                                    <td>
+                                        <span class="status-badge status-confirmed">
+                                            <i class="fas fa-check me-1"></i>{{ booking.status }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Journey Information -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-calendar me-2"></i>Journey Information
+                            </h6>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="fw-bold">Journey Date:</td>
+                                    <td>{{ booking.journey_date }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Booking Date:</td>
+                                    <td>{{ booking.booking_date }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Important Instructions -->
+                    <div class="alert alert-warning">
+                        <h6><i class="fas fa-exclamation-triangle me-2"></i>Important Instructions</h6>
+                        <ul class="mb-0">
+                            <li>Please arrive at the station at least 30 minutes before departure</li>
+                            <li>Carry a valid photo ID along with this booking confirmation</li>
+                            <li>You can cancel this booking up to 2 hours before departure</li>
+                            <li>For any queries, contact our 24/7 customer support</li>
+                        </ul>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="row g-3 mt-4">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100" onclick="window.print()">
+                                <i class="fas fa-print me-2"></i>Print
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-info w-100" onclick="downloadPDF()">
+                                <i class="fas fa-download me-2"></i>Download
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ url_for('my_bookings') }}" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-list me-2"></i>My Bookings
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ url_for('index') }}" class="btn btn-custom w-100">
+                                <i class="fas fa-home me-2"></i>Home
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Cancellation Option -->
+                    <div class="text-center mt-4 pt-4 border-top">
+                        <p class="text-muted mb-2">Need to cancel this booking?</p>
+                        <button class="btn btn-outline-danger" onclick="confirmCancel()">
+                            <i class="fas fa-times me-2"></i>Cancel Booking
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Confirmation Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    Confirm Cancellation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to cancel this booking?</p>
+                <p class="text-muted small">
+                    <strong>Booking ID:</strong> {{ booking.booking_id }}<br>
+                    <strong>Train:</strong> {{ train.name }}<br>
+                    <strong>Journey Date:</strong> {{ booking.journey_date }}
+                </p>
+                <div class="alert alert-warning">
+                    <small>
+                        <i class="fas fa-info-circle me-1"></i>
+                        This action cannot be undone. You may be eligible for a refund based on our cancellation policy.
+                    </small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Keep Booking
+                </button>
+                <a href="{{ url_for('cancel_booking', booking_id=booking.booking_id) }}" 
+                   class="btn btn-danger">
+                    <i class="fas fa-times me-2"></i>Yes, Cancel Booking
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmCancel() {
+    const modal = new bootstrap.Modal(document.getElementById('cancelModal'));
+    modal.show();
+}
+
+function downloadPDF() {
+    // Simple implementation - in production, you'd generate a proper PDF
+    alert('PDF download feature will be implemented soon!');
+}
+
+// Auto-select booking ID for easy copying
+document.addEventListener('DOMContentLoaded', function() {
+    const bookingId = document.querySelector('.font-monospace');
+    if (bookingId) {
+        bookingId.addEventListener('click', function() {
+            // Select the text
+            if (window.getSelection) {
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(this);
+                selection.removeAllRanges();
+                selection.addRange(range);
+                
+                // Copy to clipboard if possible
+                try {
+                    document.execCommand('copy');
+                    // Show temporary feedback
+                    const originalText = this.textContent;
+                    this.textContent = 'Copied!';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 1000);
+                } catch (err) {
+                    console.log('Copy failed');
+                }
+            }
+        });
+        
+        // Add cursor pointer
+        bookingId.style.cursor = 'pointer';
+        bookingId.title = 'Click to copy booking ID';
+    }
+});
+</script>
+{% endblock %}

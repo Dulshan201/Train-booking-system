@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}System Status - TrainBook Pro{% endblock %}
+
+{% block content %}
+<div style="margin-top: 100px;"></div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">System Status Dashboard</h2>
+                <p class="lead text-muted">Real-time statistics and system information</p>
+            </div>
+
+            <!-- Status Cards -->
+            <div class="row g-4 mb-5">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-train fa-3x text-primary mb-3"></i>
+                            <h3 class="text-primary">{{ stats.total_trains }}</h3>
+                            <h6>Total Trains</h6>
+                            <p class="text-muted mb-0">Available routes</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-ticket-alt fa-3x text-success mb-3"></i>
+                            <h3 class="text-success">{{ stats.total_bookings }}</h3>
+                            <h6>Total Bookings</h6>
+                            <p class="text-muted mb-0">All time bookings</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-check-circle fa-3x text-info mb-3"></i>
+                            <h3 class="text-info">{{ stats.confirmed_bookings }}</h3>
+                            <h6>Confirmed</h6>
+                            <p class="text-muted mb-0">Active bookings</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-chair fa-3x text-warning mb-3"></i>
+                            <h3 class="text-warning">{{ stats.total_seats }}</h3>
+                            <h6>Available Seats</h6>
+                            <p class="text-muted mb-0">Ready to book</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Information -->
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-info-circle me-2"></i>System Information
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="fw-bold">Version:</td>
+                                    <td>{{ stats.version }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Status:</td>
+                                    <td>
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check me-1"></i>Online
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Last Updated:</td>
+                                    <td id="current-time"></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Platform:</td>
+                                    <td>Flask Web Application</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-chart-pie me-2"></i>Booking Statistics
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <h4 class="text-success">{{ stats.confirmed_bookings }}</h4>
+                                    <small class="text-muted">Confirmed</small>
+                                </div>
+                                <div class="col-6">
+                                    <h4 class="text-danger">{{ stats.cancelled_bookings }}</h4>
+                                    <small class="text-muted">Cancelled</small>
+                                </div>
+                            </div>
+                            
+                            {% if stats.total_bookings > 0 %}
+                            <div class="progress mt-3" style="height: 20px;">
+                                <div class="progress-bar bg-success" 
+                                     style="width: {{ (stats.confirmed_bookings / stats.total_bookings * 100)|round }}%">
+                                    {{ (stats.confirmed_bookings / stats.total_bookings * 100)|round }}%
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="text-center mt-5">
+                <h5 class="mb-4">Quick Actions</h5>
+                <div class="row g-3 justify-content-center">
+                    <div class="col-auto">
+                        <a href="{{ url_for('index') }}" class="btn btn-custom">
+                            <i class="fas fa-search me-2"></i>Search Trains
+                        </a>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{{ url_for('my_bookings') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-ticket-alt me-2"></i>View Bookings
+                        </a>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-outline-info" onclick="location.reload()">
+                            <i class="fas fa-sync-alt me-2"></i>Refresh Status
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Update current time
+function updateTime() {
+    const now = new Date();
+    document.getElementById('current-time').textContent = now.toLocaleString();
+}
+
+// Update time every second
+updateTime();
+setInterval(updateTime, 1000);
+
+// Auto-refresh status every 30 seconds
+setInterval(() => {
+    location.reload();
+}, 30000);
+</script>
+{% endblock %}

@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}Book Ticket - TrainBook Pro{% endblock %}
+
+{% block content %}
+<div style="margin-top: 100px;"></div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Train Information -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-train me-2"></i>Selected Train Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4 class="text-primary">{{ train.name }}</h4>
+                            <p class="text-muted mb-2">Train ID: {{ train.train_id }}</p>
+                            
+                            <div class="route-info">
+                                <div class="row text-center">
+                                    <div class="col-5">
+                                        <div class="fw-bold">{{ train.source }}</div>
+                                        <div class="text-primary fs-4 fw-bold">{{ train.departure_time }}</div>
+                                        <small class="text-muted">Departure</small>
+                                    </div>
+                                    <div class="col-2 d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-arrow-right fa-2x text-muted"></i>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="fw-bold">{{ train.destination }}</div>
+                                        <div class="text-success fs-4 fw-bold">{{ train.arrival_time }}</div>
+                                        <small class="text-muted">Arrival</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="price-tag fs-3">
+                                ${{ "%.2f"|format(train.price) }}
+                            </div>
+                            <p class="text-muted mt-2">
+                                <i class="fas fa-chair me-1"></i>{{ train.available_seats }} seats available
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>Passenger Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('book_ticket') }}" class="needs-validation" novalidate>
+                        <input type="hidden" name="train_id" value="{{ train.train_id }}">
+                        
+                        <div class="row g-4">
+                            <!-- Personal Information -->
+                            <div class="col-12">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-id-card me-2"></i>Personal Details
+                                </h6>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">
+                                    <i class="fas fa-user text-primary me-1"></i>Full Name *
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="name" 
+                                       name="name" 
+                                       placeholder="Enter your full name"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Please enter your full name.
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="age" class="form-label">
+                                    <i class="fas fa-birthday-cake text-primary me-1"></i>Age *
+                                </label>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="age" 
+                                       name="age" 
+                                       placeholder="Enter your age"
+                                       min="1" 
+                                       max="120"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid age (1-120).
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="gender" class="form-label">
+                                    <i class="fas fa-venus-mars text-primary me-1"></i>Gender *
+                                </label>
+                                <select class="form-control" id="gender" name="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="M">Male</option>
+                                    <option value="F">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select your gender.
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">
+                                    <i class="fas fa-phone text-primary me-1"></i>Phone Number *
+                                </label>
+                                <input type="tel" 
+                                       class="form-control" 
+                                       id="phone" 
+                                       name="phone" 
+                                       placeholder="Enter your phone number"
+                                       pattern="[0-9]{10,15}"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid phone number (10-15 digits).
+                                </div>
+                            </div>
+                            
+                            <!-- Contact Information -->
+                            <div class="col-12 mt-4">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-envelope me-2"></i>Contact Information
+                                </h6>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label for="email" class="form-label">
+                                    <i class="fas fa-envelope text-primary me-1"></i>Email Address *
+                                </label>
+                                <input type="email" 
+                                       class="form-control" 
+                                       id="email" 
+                                       name="email" 
+                                       placeholder="Enter your email address"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address.
+                                </div>
+                                <div class="form-text">
+                                    We'll send your booking confirmation to this email address.
+                                </div>
+                            </div>
+                            
+                            <!-- Journey Information -->
+                            <div class="col-12 mt-4">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-calendar me-2"></i>Journey Details
+                                </h6>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="journey_date" class="form-label">
+                                    <i class="fas fa-calendar-alt text-primary me-1"></i>Journey Date *
+                                </label>
+                                <input type="date" 
+                                       class="form-control" 
+                                       id="journey_date" 
+                                       name="journey_date" 
+                                       min="{{ moment().format('YYYY-MM-DD') }}"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Please select a valid journey date.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Booking Summary -->
+                        <div class="mt-5 p-4 bg-light rounded">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-receipt me-2"></i>Booking Summary
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <table class="table table-borderless mb-0">
+                                        <tr>
+                                            <td class="fw-bold">Train:</td>
+                                            <td>{{ train.name }} ({{ train.train_id }})</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Route:</td>
+                                            <td>{{ train.source }} → {{ train.destination }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Departure:</td>
+                                            <td>{{ train.departure_time }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Arrival:</td>
+                                            <td>{{ train.arrival_time }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-4 text-md-end">
+                                    <div class="price-tag fs-4">
+                                        Total: ${{ "%.2f"|format(train.price) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Terms and Conditions -->
+                        <div class="mt-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    I agree to the <a href="#" class="text-primary">Terms and Conditions</a> 
+                                    and <a href="#" class="text-primary">Privacy Policy</a> *
+                                </label>
+                                <div class="invalid-feedback">
+                                    You must agree to the terms and conditions.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between mt-5">
+                            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Search
+                            </a>
+                            <button type="submit" class="btn btn-custom btn-lg px-5" id="bookBtn">
+                                <i class="fas fa-credit-card me-2"></i>Book Now
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Set minimum date to today
+document.getElementById('journey_date').min = new Date().toISOString().split('T')[0];
+
+// Form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    // Show loading state
+                    const bookBtn = document.getElementById('bookBtn');
+                    bookBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+                    bookBtn.disabled = true;
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
+// Phone number formatting
+document.getElementById('phone').addEventListener('input', function(e) {
+    // Remove all non-digit characters
+    this.value = this.value.replace(/\D/g, '');
+});
+
+// Email validation enhancement
+document.getElementById('email').addEventListener('blur', function(e) {
+    const email = this.value;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (email && !emailRegex.test(email)) {
+        this.setCustomValidity('Please enter a valid email address');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+</script>
+{% endblock %}

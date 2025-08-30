@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}My Bookings - TrainBook Pro{% endblock %}
+
+{% block content %}
+<div style="margin-top: 100px;"></div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2>My Bookings</h2>
+                    <p class="text-muted">Bookings for: {{ email }}</p>
+                </div>
+                <a href="{{ url_for('my_bookings') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-search me-2"></i>Search Again
+                </a>
+            </div>
+
+            {% if bookings %}
+                <div class="row g-4">
+                    {% for booking in bookings %}
+                    {% set train = booking_system.trains[booking.train_id] %}
+                    <div class="col-lg-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h5 class="card-title text-primary">{{ train.name }}</h5>
+                                        <span class="badge bg-secondary">{{ booking.booking_id[:8] }}...</span>
+                                    </div>
+                                    <span class="status-badge status-{{ booking.status.lower() }}">
+                                        {{ booking.status }}
+                                    </span>
+                                </div>
+
+                                <div class="route-info mb-3">
+                                    <div class="row text-center">
+                                        <div class="col-5">
+                                            <div class="fw-bold">{{ train.source }}</div>
+                                            <div class="text-primary">{{ train.departure_time }}</div>
+                                        </div>
+                                        <div class="col-2 d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-arrow-right text-muted"></i>
+                                        </div>
+                                        <div class="col-5">
+                                            <div class="fw-bold">{{ train.destination }}</div>
+                                            <div class="text-success">{{ train.arrival_time }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <small class="text-muted">Journey Date</small>
+                                        <div class="fw-bold">{{ booking.journey_date }}</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Price</small>
+                                        <div class="fw-bold">${{ "%.2f"|format(train.price) }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('booking_confirmation', booking_id=booking.booking_id) }}" 
+                                       class="btn btn-outline-primary btn-sm flex-fill">
+                                        <i class="fas fa-eye me-1"></i>View
+                                    </a>
+                                    {% if booking.status == "Confirmed" %}
+                                    <a href="{{ url_for('cancel_booking', booking_id=booking.booking_id) }}" 
+                                       class="btn btn-outline-danger btn-sm flex-fill"
+                                       onclick="return confirm('Are you sure you want to cancel this booking?')">
+                                        <i class="fas fa-times me-1"></i>Cancel
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <div class="card">
+                        <div class="card-body py-5">
+                            <i class="fas fa-ticket-alt fa-4x text-muted mb-4"></i>
+                            <h3 class="text-muted">No Bookings Found</h3>
+                            <p class="lead text-muted mb-4">
+                                No bookings found for <strong>{{ email }}</strong>
+                            </p>
+                            <a href="{{ url_for('index') }}" class="btn btn-custom btn-lg">
+                                <i class="fas fa-plus me-2"></i>Book Your First Ticket
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
