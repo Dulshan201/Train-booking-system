@@ -20,10 +20,11 @@
       "departure_time": "14:00",
       "arrival_time": "18:30",
       "total_seats": 80,
-      "available_seats": 79,
+      "available_seats": 78,
       "price": 65.0,
       "bookings": [
-        "cf4c0051-f1ac-4b99-8693-06437889a7c3"
+        "cf4c0051-f1ac-4b99-8693-06437889a7c3",
+        "b91f8276-ac7c-4db6-bd2b-91cab910afcf"
       ]
     },
     "T003": {
@@ -91,6 +92,36 @@
         "email": "john.demo@example.com"
       },
       "booking_date": "2025-08-30 23:37:55",
+      "journey_date": "2025-09-16",
+      "status": "Confirmed"
+    },
+    "073a7dfd-08e2-47dc-b891-09d99cb13e90": {
+      "booking_id": "073a7dfd-08e2-47dc-b891-09d99cb13e90",
+      "train_id": "T001",
+      "passenger": {
+        "passenger_id": "7602e94f-4506-49af-b4c1-61377ef2aa6a",
+        "name": "John Demo",
+        "age": 30,
+        "gender": "M",
+        "phone": "555-0123",
+        "email": "john.demo@example.com"
+      },
+      "booking_date": "2025-08-30 23:57:23",
+      "journey_date": "2025-09-15",
+      "status": "Cancelled"
+    },
+    "b91f8276-ac7c-4db6-bd2b-91cab910afcf": {
+      "booking_id": "b91f8276-ac7c-4db6-bd2b-91cab910afcf",
+      "train_id": "T002",
+      "passenger": {
+        "passenger_id": "7602e94f-4506-49af-b4c1-61377ef2aa6a",
+        "name": "John Demo",
+        "age": 30,
+        "gender": "M",
+        "phone": "555-0123",
+        "email": "john.demo@example.com"
+      },
+      "booking_date": "2025-08-30 23:57:23",
       "journey_date": "2025-09-16",
       "status": "Confirmed"
     }
