@@ -266,6 +266,10 @@ def main():
     """Main function to run the train booking system"""
     system = TrainBookingSystem()
     
+    # Welcome message
+    print("*** Welcome to the Train Booking System! ***")
+    print("Let's help you book your perfect journey!\n")
+    
     while True:
         print("\n" + "="*50)
         print("🚂 TRAIN BOOKING SYSTEM 🚂")
@@ -362,7 +366,7 @@ def main():
             break
             
         else:
-            print("❌ Invalid choice. Please try again.")
+            print("❌ Invalid choice. Please enter a number between 1-7.")
 
 if __name__ == "__main__":
     main()
