@@ -1,5 +1,8 @@
-# No external dependencies required
-# This project uses only Python standard library modules:
+# Core dependencies
+psutil>=5.8.0
+
+# No other external dependencies required
+# This project uses Python standard library modules:
 # - datetime
 # - json
 # - os

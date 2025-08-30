@@ -232,6 +232,36 @@ class TrainBookingSystem:
         print(f"Price: ${train.price:.2f}")
         print("="*50)
 
+    def show_system_status(self):
+        """Display system status and statistics"""
+        import psutil
+        import datetime
+        
+        print("\n" + "="*60)
+        print("🚂 TRAIN BOOKING SYSTEM STATUS 🚂")
+        print("="*60)
+        print(f"📊 Total Trains Loaded: {len(self.trains)}")
+        print(f"🎫 Total Bookings Made: {len(self.bookings)}")
+        
+        # Count confirmed vs cancelled bookings
+        confirmed = sum(1 for b in self.bookings.values() if b.status == "Confirmed")
+        cancelled = sum(1 for b in self.bookings.values() if b.status == "Cancelled")
+        
+        print(f"✅ Confirmed Bookings: {confirmed}")
+        print(f"❌ Cancelled Bookings: {cancelled}")
+        
+        # System info
+        memory_info = psutil.virtual_memory()
+        print(f"💾 Memory Usage: {memory_info.percent}%")
+        print(f"🕐 Current Time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"⚡ System Status: ONLINE")
+        
+        # Available seats summary
+        total_seats = sum(train.available_seats for train in self.trains.values())
+        print(f"💺 Total Available Seats: {total_seats}")
+        
+        print("="*60)
+
 def main():
     """Main function to run the train booking system"""
     system = TrainBookingSystem()
@@ -245,10 +275,11 @@ def main():
         print("3. Cancel Booking")
         print("4. View Booking")
         print("5. View My Bookings")
-        print("6. Exit")
+        print("6. System Status")
+        print("7. Exit")
         print("="*50)
         
-        choice = input("Enter your choice (1-6): ").strip()
+        choice = input("Enter your choice (1-7): ").strip()
         
         if choice == '1':
             print("\n🔍 SEARCH TRAINS")
@@ -323,6 +354,10 @@ def main():
                 print("No bookings found for this email.")
                 
         elif choice == '6':
+            print("\n📊 SYSTEM STATUS")
+            system.show_system_status()
+                
+        elif choice == '7':
             print("Thank you for using Train Booking System! 🚂")
             break
             
