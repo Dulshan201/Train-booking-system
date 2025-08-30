@@ -1,0 +1,98 @@
+{
+  "trains": {
+    "T001": {
+      "train_id": "T001",
+      "name": "Express Mail",
+      "source": "New York",
+      "destination": "Boston",
+      "departure_time": "08:00",
+      "arrival_time": "12:00",
+      "total_seats": 100,
+      "available_seats": 100,
+      "price": 50.0,
+      "bookings": []
+    },
+    "T002": {
+      "train_id": "T002",
+      "name": "City Connect",
+      "source": "Boston",
+      "destination": "Washington",
+      "departure_time": "14:00",
+      "arrival_time": "18:30",
+      "total_seats": 80,
+      "available_seats": 79,
+      "price": 65.0,
+      "bookings": [
+        "cf4c0051-f1ac-4b99-8693-06437889a7c3"
+      ]
+    },
+    "T003": {
+      "train_id": "T003",
+      "name": "Metro Link",
+      "source": "Washington",
+      "destination": "Philadelphia",
+      "departure_time": "10:30",
+      "arrival_time": "13:15",
+      "total_seats": 120,
+      "available_seats": 120,
+      "price": 45.0,
+      "bookings": []
+    },
+    "T004": {
+      "train_id": "T004",
+      "name": "Coast Runner",
+      "source": "Philadelphia",
+      "destination": "New York",
+      "departure_time": "16:00",
+      "arrival_time": "19:45",
+      "total_seats": 90,
+      "available_seats": 90,
+      "price": 55.0,
+      "bookings": []
+    },
+    "T005": {
+      "train_id": "T005",
+      "name": "Night Express",
+      "source": "New York",
+      "destination": "Chicago",
+      "departure_time": "22:00",
+      "arrival_time": "08:00+1",
+      "total_seats": 150,
+      "available_seats": 150,
+      "price": 120.0,
+      "bookings": []
+    }
+  },
+  "bookings": {
+    "c0c1ba74-e8f2-4391-a5eb-1c8e2ff85fe7": {
+      "booking_id": "c0c1ba74-e8f2-4391-a5eb-1c8e2ff85fe7",
+      "train_id": "T001",
+      "passenger": {
+        "passenger_id": "2d735313-b8c6-41bd-a303-5d3aee9fab47",
+        "name": "John Demo",
+        "age": 30,
+        "gender": "M",
+        "phone": "555-0123",
+        "email": "john.demo@example.com"
+      },
+      "booking_date": "2025-08-30 23:37:55",
+      "journey_date": "2025-09-15",
+      "status": "Cancelled"
+    },
+    "cf4c0051-f1ac-4b99-8693-06437889a7c3": {
+      "booking_id": "cf4c0051-f1ac-4b99-8693-06437889a7c3",
+      "train_id": "T002",
+      "passenger": {
+        "passenger_id": "2d735313-b8c6-41bd-a303-5d3aee9fab47",
+        "name": "John Demo",
+        "age": 30,
+        "gender": "M",
+        "phone": "555-0123",
+        "email": "john.demo@example.com"
+      },
+      "booking_date": "2025-08-30 23:37:55",
+      "journey_date": "2025-09-16",
+      "status": "Confirmed"
+    }
+  }
+}

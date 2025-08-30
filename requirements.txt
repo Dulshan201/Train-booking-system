@@ -1,0 +1,12 @@
+# No external dependencies required
+# This project uses only Python standard library modules:
+# - datetime
+# - json
+# - os
+# - typing
+# - uuid
+
+# For future enhancements, you might want to add:
+# requests>=2.25.1
+# flask>=2.0.1
+# sqlite3 (included in Python standard library)
