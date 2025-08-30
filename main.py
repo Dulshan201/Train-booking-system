@@ -4,6 +4,9 @@ Train Booking System
 A comprehensive train ticket booking and management system
 """
 
+# Version Information
+VERSION = "1.0.0"
+
 from datetime import datetime, timedelta
 import json
 import os
@@ -240,6 +243,7 @@ class TrainBookingSystem:
         print("\n" + "="*60)
         print("🚂 TRAIN BOOKING SYSTEM STATUS 🚂")
         print("="*60)
+        print(f"Version: {VERSION}")
         print(f"📊 Total Trains Loaded: {len(self.trains)}")
         print(f"🎫 Total Bookings Made: {len(self.bookings)}")
         
