@@ -1,10 +1,36 @@
-# 🚂 Train Booking System
+# 🚂 TrainBook Pro - Worldwide Train Booking System
 
-A comprehensive train ticket booking and management system built with Python. This system allows users to search for trains, book tickets, manage bookings, and view their travel history.
+A comprehensive, modern train booking system with **worldwide coverage** supporting 50+ countries and 500+ cities. Features beautiful web UI, smart country-first search, and global train routes.
 
 ## ✨ Features
 
-- 🔍 **Train Search**: Search for trains between different stations
+### 🌍 **Worldwide Coverage**
+- **50+ Countries** across all continents
+- **500+ Cities** from major global destinations  
+- **35+ International Train Routes** including high-speed and luxury trains
+- **Country-First Search** - Select country first, then cities for better UX
+
+### 🔍 **Smart Search System**
+- **Dual Search Modes**: Country-first or direct city search
+- **Real-time Autocomplete** with fuzzy matching
+- **Intelligent Suggestions** based on user input
+- **Mobile-Friendly** responsive design
+
+### 🎨 **Modern Web Interface**
+- **Beautiful UI** with Bootstrap 5 and custom styling
+- **Glass-morphism Effects** and gradient backgrounds
+- **Font Awesome Icons** and Google Fonts
+- **Responsive Design** for all devices
+
+### 🚂 **Global Train Routes**
+- **European High-Speed**: Eurostar (London-Paris), TGV, ICE, AVE
+- **Asian Bullet Trains**: Shinkansen (Tokyo-Osaka), KTX (Seoul-Busan)
+- **Luxury Trains**: Blue Train, Indian Pacific, Pride of Africa  
+- **Regional Networks**: Covering North America, Europe, Asia, Oceania
+- **Scenic Routes**: Swiss Alps, Rocky Mountaineer, Trans-Siberian
+
+### 🎫 **Core Booking Features**
+- 🔍 **Train Search**: Search trains between any cities worldwide
 - 🎫 **Ticket Booking**: Book train tickets with passenger details
 - ❌ **Booking Cancellation**: Cancel existing bookings
 - 📋 **Booking Management**: View booking details and history

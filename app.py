@@ -11,7 +11,9 @@ import os
 import uuid
 import secrets
 from main import TrainBookingSystem, Train, Passenger, Booking
-from cities import WORLD_CITIES, CITY_REGIONS
+from cities import (WORLD_CITIES, COUNTRIES_AND_CITIES, REGIONS, 
+                   get_all_countries, get_cities_by_country, get_countries_by_region,
+                   search_cities_in_country, search_countries, get_country_for_city, get_region_for_country)
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -209,10 +211,41 @@ def search_cities():
     # Limit to 10 results for better performance
     return jsonify(matching_cities[:10])
 
+@app.route('/api/countries')
+def get_countries():
+    """API endpoint to get all available countries"""
+    return jsonify(get_all_countries())
+
+@app.route('/api/countries/search')
+def search_countries_api():
+    """API endpoint to search countries for autocomplete"""
+    query = request.args.get('q', '').lower()
+    if len(query) < 1:
+        return jsonify(get_all_countries()[:10])
+    
+    matching_countries = search_countries(query, limit=10)
+    return jsonify(matching_countries)
+
+@app.route('/api/countries/<country>/cities')
+def get_cities_by_country_api(country):
+    """API endpoint to get cities for a specific country"""
+    cities = get_cities_by_country(country)
+    return jsonify(cities)
+
+@app.route('/api/countries/<country>/cities/search')
+def search_cities_in_country_api(country):
+    """API endpoint to search cities within a specific country"""
+    query = request.args.get('q', '').lower()
+    if len(query) < 1:
+        return jsonify(get_cities_by_country(country)[:10])
+    
+    matching_cities = search_cities_in_country(country, query, limit=10)
+    return jsonify(matching_cities)
+
 @app.route('/api/regions')
 def get_regions():
-    """API endpoint to get cities grouped by regions"""
-    return jsonify(CITY_REGIONS)
+    """API endpoint to get countries grouped by regions"""
+    return jsonify(REGIONS)
 
 @app.errorhandler(404)
 def not_found(error):
