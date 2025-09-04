@@ -1,0 +1,789 @@
+{% extends "base.html" %}
+
+{% block title %}Home - TrainBook Pro{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 80px 0;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="rgba(255,255,255,0.1)"><polygon points="1000,100 1000,0 0,100"/></svg>') no-repeat bottom;
+        background-size: cover;
+    }
+    
+    .search-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    
+    .autocomplete-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        display: none;
+    }
+    
+    .autocomplete-suggestion {
+        padding: 12px 16px;
+        cursor: pointer;
+        border-bottom: 1px solid #f0f0f0;
+        transition: background-color 0.2s;
+    }
+    
+    .autocomplete-suggestion:hover,
+    .autocomplete-suggestion.selected {
+        background-color: #f8f9fa;
+    }
+    
+    .search-mode-toggle {
+        margin-bottom: 2rem;
+    }
+    
+    .btn-group label {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-train me-3"></i>
+                    Book Trains Worldwide
+                </h1>
+                <p class="lead mb-4">
+                    Travel the world with our comprehensive train booking system. 
+                    From high-speed trains to scenic routes, book your journey across 50+ countries.
+                </p>
+                <div class="d-flex gap-3">
+                    <div class="feature-highlight">
+                        <i class="fas fa-globe text-warning"></i>
+                        <span class="ms-2">500+ Cities</span>
+                    </div>
+                    <div class="feature-highlight">
+                        <i class="fas fa-route text-success"></i>
+                        <span class="ms-2">35+ Routes</span>
+                    </div>
+                    <div class="feature-highlight">
+                        <i class="fas fa-shield-alt text-info"></i>
+                        <span class="ms-2">Secure Booking</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="search-card p-4">
+                    <h3 class="text-center mb-4 text-dark">
+                        <i class="fas fa-search text-primary me-2"></i>
+                        Search Trains
+                    </h3>
+                    
+                    <!-- Search Mode Toggle -->
+                    <div class="search-mode-toggle text-center">
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="search-mode" id="country-mode" checked>
+                            <label class="btn btn-outline-primary" for="country-mode">
+                                <i class="fas fa-flag me-1"></i>Country First
+                            </label>
+                            
+                            <input type="radio" class="btn-check" name="search-mode" id="city-mode">
+                            <label class="btn btn-outline-primary" for="city-mode">
+                                <i class="fas fa-city me-1"></i>Direct City
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <form method="POST" action="{{ url_for('search_trains') }}" class="needs-validation" novalidate>
+                        
+                        <!-- Country-First Mode -->
+                        <div id="country-search-form">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="source-country" class="form-label text-dark">
+                                        <i class="fas fa-flag text-primary me-1"></i>From Country
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control" id="source-country" 
+                                               placeholder="Select departure country..." autocomplete="off">
+                                        <div id="source-country-suggestions" class="autocomplete-suggestions"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="destination-country" class="form-label text-dark">
+                                        <i class="fas fa-flag text-primary me-1"></i>To Country
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control" id="destination-country" 
+                                               placeholder="Select destination country..." autocomplete="off">
+                                        <div id="destination-country-suggestions" class="autocomplete-suggestions"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="source-city" class="form-label text-dark">
+                                        <i class="fas fa-map-marker-alt text-success me-1"></i>From City
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control" id="source-city" name="source"
+                                               placeholder="First select country..." disabled autocomplete="off">
+                                        <div id="source-city-suggestions" class="autocomplete-suggestions"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="destination-city" class="form-label text-dark">
+                                        <i class="fas fa-map-marker-alt text-danger me-1"></i>To City
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control" id="destination-city" name="destination"
+                                               placeholder="First select country..." disabled autocomplete="off">
+                                        <div id="destination-city-suggestions" class="autocomplete-suggestions"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Direct City Mode -->
+                        <div id="city-search-form" style="display: none;">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="source" class="form-label text-dark">
+                                        <i class="fas fa-map-marker-alt text-success me-1"></i>From
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control" id="source" name="source_direct"
+                                               placeholder="Enter departure city..." autocomplete="off">
+                                        <div id="source-suggestions" class="autocomplete-suggestions"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="destination" class="form-label text-dark">
+                                        <i class="fas fa-map-marker-alt text-danger me-1"></i>To
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control" id="destination" name="destination_direct"
+                                               placeholder="Enter destination city..." autocomplete="off">
+                                        <div id="destination-suggestions" class="autocomplete-suggestions"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Journey Date -->
+                        <div class="mb-3">
+                            <label for="journey_date" class="form-label text-dark">
+                                <i class="fas fa-calendar text-warning me-1"></i>Journey Date
+                            </label>
+                            <input type="date" class="form-control" id="journey_date" name="journey_date" 
+                                   min="{{ today }}" value="{{ today }}" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-search me-2"></i>Search Trains
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container py-5">
+    <div class="row text-center mb-5">
+        <div class="col-12">
+            <h2 class="display-5 fw-bold mb-3">Why Choose TrainBook Pro?</h2>
+            <p class="lead text-muted">Experience the future of train travel booking</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="text-center h-100">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <h4>Worldwide Coverage</h4>
+                <p class="text-muted">Book trains across 50+ countries including Europe, Asia, Americas, and more.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="text-center h-100">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h4>Smart Search</h4>
+                <p class="text-muted">Country-first search with intelligent city autocomplete and instant suggestions.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="text-center h-100">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h4>Mobile Friendly</h4>
+                <p class="text-muted">Responsive design that works perfectly on all devices and screen sizes.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popular Routes -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-6 fw-bold mb-3">Popular International Routes</h2>
+                <p class="lead text-muted">Discover amazing train journeys around the world</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-train text-primary fs-1 mb-3"></i>
+                        <h5>London → Paris</h5>
+                        <p class="text-muted">Eurostar High-Speed</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-bullet-train text-danger fs-1 mb-3"></i>
+                        <h5>Tokyo → Osaka</h5>
+                        <p class="text-muted">Shinkansen Bullet Train</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-mountain text-success fs-1 mb-3"></i>
+                        <h5>Sydney → Melbourne</h5>
+                        <p class="text-muted">Australian Explorer</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-star text-warning fs-1 mb-3"></i>
+                        <h5>New York → Chicago</h5>
+                        <p class="text-muted">American Express</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Country-first search system
+class CountryAutocomplete {
+    constructor(inputId, suggestionsId, cityInputId = null) {
+        this.input = document.getElementById(inputId);
+        this.suggestions = document.getElementById(suggestionsId);
+        this.cityInput = cityInputId ? document.getElementById(cityInputId) : null;
+        this.selectedIndex = -1;
+        
+        if (!this.input || !this.suggestions) return;
+        
+        this.input.addEventListener('input', (e) => this.handleInput(e));
+        this.input.addEventListener('keydown', (e) => this.handleKeydown(e));
+        this.input.addEventListener('blur', () => this.handleBlur());
+        this.input.addEventListener('focus', () => this.handleFocus());
+    }
+    
+    async handleInput(e) {
+        const query = e.target.value.trim();
+        
+        if (query.length < 1) {
+            this.hideSuggestions();
+            if (this.cityInput) {
+                this.cityInput.value = '';
+                this.cityInput.disabled = true;
+                this.cityInput.placeholder = 'First select country...';
+            }
+            return;
+        }
+        
+        await this.searchCountries(query);
+    }
+    
+    async searchCountries(query) {
+        try {
+            const response = await fetch(`/api/countries/search?q=${encodeURIComponent(query)}`);
+            const countries = await response.json();
+            this.showSuggestions(countries);
+        } catch (error) {
+            console.error('Error searching countries:', error);
+        }
+    }
+    
+    showSuggestions(countries) {
+        if (!countries.length) {
+            this.hideSuggestions();
+            return;
+        }
+        
+        this.suggestions.innerHTML = countries.map(country => 
+            `<div class="autocomplete-suggestion" data-country="${country}">
+                <i class="fas fa-flag me-2 text-primary"></i>
+                ${country}
+            </div>`
+        ).join('');
+        
+        this.suggestions.querySelectorAll('.autocomplete-suggestion').forEach(item => {
+            item.addEventListener('click', () => this.selectCountry(item.dataset.country));
+        });
+        
+        this.suggestions.style.display = 'block';
+        this.selectedIndex = -1;
+    }
+    
+    selectCountry(country) {
+        this.input.value = country;
+        this.hideSuggestions();
+        
+        if (this.cityInput) {
+            this.cityInput.disabled = false;
+            this.cityInput.placeholder = `Select city in ${country}...`;
+            this.cityInput.value = '';
+            this.cityInput.focus();
+        }
+    }
+    
+    hideSuggestions() {
+        this.suggestions.style.display = 'none';
+        this.selectedIndex = -1;
+    }
+    
+    handleKeydown(e) {
+        const items = this.suggestions.querySelectorAll('.autocomplete-suggestion');
+        
+        if (!items.length) return;
+        
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                this.selectedIndex = Math.min(this.selectedIndex + 1, items.length - 1);
+                this.updateSelection(items);
+                break;
+                
+            case 'ArrowUp':
+                e.preventDefault();
+                this.selectedIndex = Math.max(this.selectedIndex - 1, -1);
+                this.updateSelection(items);
+                break;
+                
+            case 'Enter':
+                e.preventDefault();
+                if (this.selectedIndex >= 0 && items[this.selectedIndex]) {
+                    this.selectCountry(items[this.selectedIndex].dataset.country);
+                }
+                break;
+                
+            case 'Escape':
+                this.hideSuggestions();
+                break;
+        }
+    }
+    
+    updateSelection(items) {
+        items.forEach((item, index) => {
+            item.classList.toggle('selected', index === this.selectedIndex);
+        });
+        
+        if (this.selectedIndex >= 0 && items[this.selectedIndex]) {
+            items[this.selectedIndex].scrollIntoView({ block: 'nearest' });
+        }
+    }
+    
+    handleBlur() {
+        setTimeout(() => this.hideSuggestions(), 150);
+    }
+    
+    handleFocus() {
+        if (this.input.value.length >= 1) {
+            this.searchCountries(this.input.value);
+        }
+    }
+}
+
+// City autocomplete for specific country
+class CityInCountryAutocomplete {
+    constructor(inputId, suggestionsId, countryInputId) {
+        this.input = document.getElementById(inputId);
+        this.suggestions = document.getElementById(suggestionsId);
+        this.countryInput = document.getElementById(countryInputId);
+        this.selectedIndex = -1;
+        
+        if (!this.input || !this.suggestions || !this.countryInput) return;
+        
+        this.input.addEventListener('input', (e) => this.handleInput(e));
+        this.input.addEventListener('keydown', (e) => this.handleKeydown(e));
+        this.input.addEventListener('blur', () => this.handleBlur());
+        this.input.addEventListener('focus', () => this.handleFocus());
+    }
+    
+    async handleInput(e) {
+        const query = e.target.value.trim();
+        const country = this.countryInput.value.trim();
+        
+        if (!country) {
+            this.hideSuggestions();
+            return;
+        }
+        
+        if (query.length < 1) {
+            await this.loadAllCities(country);
+            return;
+        }
+        
+        await this.searchCitiesInCountry(country, query);
+    }
+    
+    async loadAllCities(country) {
+        try {
+            const response = await fetch(`/api/countries/${encodeURIComponent(country)}/cities`);
+            const cities = await response.json();
+            this.showSuggestions(cities.slice(0, 10));
+        } catch (error) {
+            console.error('Error loading cities:', error);
+        }
+    }
+    
+    async searchCitiesInCountry(country, query) {
+        try {
+            const response = await fetch(`/api/countries/${encodeURIComponent(country)}/cities/search?q=${encodeURIComponent(query)}`);
+            const cities = await response.json();
+            this.showSuggestions(cities);
+        } catch (error) {
+            console.error('Error searching cities:', error);
+        }
+    }
+    
+    showSuggestions(cities) {
+        if (!cities.length) {
+            this.hideSuggestions();
+            return;
+        }
+        
+        this.suggestions.innerHTML = cities.map(city => 
+            `<div class="autocomplete-suggestion" data-city="${city}">
+                <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                ${city}
+            </div>`
+        ).join('');
+        
+        this.suggestions.querySelectorAll('.autocomplete-suggestion').forEach(item => {
+            item.addEventListener('click', () => this.selectCity(item.dataset.city));
+        });
+        
+        this.suggestions.style.display = 'block';
+        this.selectedIndex = -1;
+    }
+    
+    selectCity(city) {
+        this.input.value = city;
+        this.hideSuggestions();
+    }
+    
+    hideSuggestions() {
+        this.suggestions.style.display = 'none';
+        this.selectedIndex = -1;
+    }
+    
+    handleKeydown(e) {
+        const items = this.suggestions.querySelectorAll('.autocomplete-suggestion');
+        
+        if (!items.length) return;
+        
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                this.selectedIndex = Math.min(this.selectedIndex + 1, items.length - 1);
+                this.updateSelection(items);
+                break;
+                
+            case 'ArrowUp':
+                e.preventDefault();
+                this.selectedIndex = Math.max(this.selectedIndex - 1, -1);
+                this.updateSelection(items);
+                break;
+                
+            case 'Enter':
+                e.preventDefault();
+                if (this.selectedIndex >= 0 && items[this.selectedIndex]) {
+                    this.selectCity(items[this.selectedIndex].dataset.city);
+                }
+                break;
+                
+            case 'Escape':
+                this.hideSuggestions();
+                break;
+        }
+    }
+    
+    updateSelection(items) {
+        items.forEach((item, index) => {
+            item.classList.toggle('selected', index === this.selectedIndex);
+        });
+        
+        if (this.selectedIndex >= 0 && items[this.selectedIndex]) {
+            items[this.selectedIndex].scrollIntoView({ block: 'nearest' });
+        }
+    }
+    
+    handleBlur() {
+        setTimeout(() => this.hideSuggestions(), 150);
+    }
+    
+    handleFocus() {
+        const country = this.countryInput.value.trim();
+        if (country) {
+            if (this.input.value.length >= 1) {
+                this.searchCitiesInCountry(country, this.input.value);
+            } else {
+                this.loadAllCities(country);
+            }
+        }
+    }
+}
+
+// Direct city search
+class CityAutocomplete {
+    constructor(inputId, suggestionsId) {
+        this.input = document.getElementById(inputId);
+        this.suggestions = document.getElementById(suggestionsId);
+        this.selectedIndex = -1;
+        
+        if (!this.input || !this.suggestions) return;
+        
+        this.input.addEventListener('input', (e) => this.handleInput(e));
+        this.input.addEventListener('keydown', (e) => this.handleKeydown(e));
+        this.input.addEventListener('blur', () => this.handleBlur());
+        this.input.addEventListener('focus', () => this.handleFocus());
+    }
+    
+    async handleInput(e) {
+        const query = e.target.value.trim();
+        
+        if (query.length < 2) {
+            this.hideSuggestions();
+            return;
+        }
+        
+        await this.searchCities(query);
+    }
+    
+    async searchCities(query) {
+        try {
+            const response = await fetch(`/api/cities/search?q=${encodeURIComponent(query)}`);
+            const cities = await response.json();
+            this.showSuggestions(cities);
+        } catch (error) {
+            console.error('Error searching cities:', error);
+        }
+    }
+    
+    showSuggestions(cities) {
+        if (!cities.length) {
+            this.hideSuggestions();
+            return;
+        }
+        
+        this.suggestions.innerHTML = cities.map(city => 
+            `<div class="autocomplete-suggestion" data-city="${city}">
+                <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                ${city}
+            </div>`
+        ).join('');
+        
+        this.suggestions.querySelectorAll('.autocomplete-suggestion').forEach(item => {
+            item.addEventListener('click', () => this.selectCity(item.dataset.city));
+        });
+        
+        this.suggestions.style.display = 'block';
+        this.selectedIndex = -1;
+    }
+    
+    selectCity(city) {
+        this.input.value = city;
+        this.hideSuggestions();
+    }
+    
+    hideSuggestions() {
+        this.suggestions.style.display = 'none';
+        this.selectedIndex = -1;
+    }
+    
+    handleKeydown(e) {
+        const items = this.suggestions.querySelectorAll('.autocomplete-suggestion');
+        
+        if (!items.length) return;
+        
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                this.selectedIndex = Math.min(this.selectedIndex + 1, items.length - 1);
+                this.updateSelection(items);
+                break;
+                
+            case 'ArrowUp':
+                e.preventDefault();
+                this.selectedIndex = Math.max(this.selectedIndex - 1, -1);
+                this.updateSelection(items);
+                break;
+                
+            case 'Enter':
+                e.preventDefault();
+                if (this.selectedIndex >= 0 && items[this.selectedIndex]) {
+                    this.selectCity(items[this.selectedIndex].dataset.city);
+                }
+                break;
+                
+            case 'Escape':
+                this.hideSuggestions();
+                break;
+        }
+    }
+    
+    updateSelection(items) {
+        items.forEach((item, index) => {
+            item.classList.toggle('selected', index === this.selectedIndex);
+        });
+        
+        if (this.selectedIndex >= 0 && items[this.selectedIndex]) {
+            items[this.selectedIndex].scrollIntoView({ block: 'nearest' });
+        }
+    }
+    
+    handleBlur() {
+        setTimeout(() => this.hideSuggestions(), 150);
+    }
+    
+    handleFocus() {
+        if (this.input.value.length >= 2) {
+            this.searchCities(this.input.value);
+        }
+    }
+}
+
+// Search mode toggle
+function toggleSearchMode() {
+    const countryMode = document.getElementById('country-mode');
+    const countryForm = document.getElementById('country-search-form');
+    const cityForm = document.getElementById('city-search-form');
+    
+    if (countryMode && countryMode.checked) {
+        countryForm.style.display = 'block';
+        cityForm.style.display = 'none';
+        
+        // Enable country-mode inputs
+        document.getElementById('source-city').name = 'source';
+        document.getElementById('destination-city').name = 'destination';
+        document.getElementById('source').name = '';
+        document.getElementById('destination').name = '';
+    } else {
+        countryForm.style.display = 'none';
+        cityForm.style.display = 'block';
+        
+        // Enable city-mode inputs
+        document.getElementById('source').name = 'source';
+        document.getElementById('destination').name = 'destination';
+        document.getElementById('source-city').name = '';
+        document.getElementById('destination-city').name = '';
+    }
+}
+
+// Initialize everything
+document.addEventListener('DOMContentLoaded', function() {
+    // Country-first mode
+    new CountryAutocomplete('source-country', 'source-country-suggestions', 'source-city');
+    new CountryAutocomplete('destination-country', 'destination-country-suggestions', 'destination-city');
+    new CityInCountryAutocomplete('source-city', 'source-city-suggestions', 'source-country');
+    new CityInCountryAutocomplete('destination-city', 'destination-city-suggestions', 'destination-country');
+    
+    // Direct city mode
+    new CityAutocomplete('source', 'source-suggestions');
+    new CityAutocomplete('destination', 'destination-suggestions');
+    
+    // Search mode toggle
+    const countryModeBtn = document.getElementById('country-mode');
+    const cityModeBtn = document.getElementById('city-mode');
+    
+    if (countryModeBtn && cityModeBtn) {
+        countryModeBtn.addEventListener('change', toggleSearchMode);
+        cityModeBtn.addEventListener('change', toggleSearchMode);
+        
+        // Set default mode
+        countryModeBtn.checked = true;
+        toggleSearchMode();
+    }
+    
+    // Form validation
+    const forms = document.getElementsByClassName('needs-validation');
+    Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+});
+</script>
+{% endblock %}
